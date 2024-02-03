@@ -7,16 +7,16 @@
 The following table must be completed as soon as the repository is created. ***IMPORTANT: you may be dropped from the course if your student's info is not there by the time the instructor checks your repository's organization***
 
 
-|        Student ID          |     Student Full Name      |        SFSU Email          |
-| ---------------------------| ---------------------------| ---------------------------|
-|      your student id       |       your full name       |      your sfsu email       |
+| Student ID | Student Full Name |    SFSU Email    |
+|:----------:|:-----------------:|:----------------:|
+| 923100929  |    Nhan Nguyen    |nnguyen14@sfsu.edu|
 
 
 A random database topic will be assigned by the instructor to all the students. As soon as it is assigned, fill out the following table with your topic´s info.
 
-|       Topic Description        |              Date Assigned                 |
-| ------------------------------ | ------------------------------------------ |
-|         your topic             |       the date the topic was assigned      |
+|    Topic Description    | Date Assigned |
+|:---------------------:|:-------------:|
+|           Hospital Management System           |  02/02/2024   |
 
 
 All the work in this course is divided into five milestones which in total are worth 50% of your final grade in this course 
