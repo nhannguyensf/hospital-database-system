@@ -19,16 +19,16 @@ INSERT INTO Hospital (hospital_id, name, location) VALUES
 
 -- Insert sample data into Department
 INSERT INTO Department (department_id, hospital, name, manager) VALUES
-(1, 1, 'Cardiology', 1),
-(2, 1, 'Pediatrics', 2),
-(3, 2, 'Neurology', 3),
-(4, 2, 'Emergency', 4),
-(5, 3, 'Orthopedics', 5),
-(6, 4, 'Maternity', 6),
-(7, 5, 'Oncology', 7),
-(8, 6, 'Cardiology', 8),
-(9, 7, 'Neurology', 9),
-(10, 8, 'Pediatrics', 10);
+(1, 1, 'Cardiology', NULL),
+(2, 1, 'Pediatrics', NULL),
+(3, 2, 'Neurology', NULL),
+(4, 2, 'Emergency', NULL),
+(5, 3, 'Orthopedics', NULL),
+(6, 4, 'Maternity', NULL),
+(7, 5, 'Oncology', NULL),
+(8, 6, 'Cardiology', NULL),
+(9, 7, 'Neurology', NULL),
+(10, 8, 'Pediatrics', NULL);
 
 -- Insert sample data into Employee
 INSERT INTO Employee (employee_id, employee_name, hospital, department, bio, email) VALUES
@@ -49,6 +49,7 @@ INSERT INTO Employee (employee_id, employee_name, hospital, department, bio, ema
 -- Insert sample data into Doctor
 INSERT INTO Doctor (doctor_id, specialization, license_number) VALUES
 (1, 'Cardiology', 'LIC123456'),
+(2, 'Pediatrics', 'PED336699'),
 (3, 'Neurology', 'LIC789012'),
 (4, 'Dermatology', 'DER123456'),
 (5, 'Psychiatry', 'PSY654321'),
