@@ -4,8 +4,6 @@
 
 USE HospitalManagementDB;
 
-SET FOREIGN_KEY_CHECKS=0;
-
 -- Insert sample data into Hospital
 INSERT INTO Hospital (hospital_id, name, location) VALUES
 (1, 'Metro Health Hospital', '123 Main St, Metroville'),
@@ -36,7 +34,17 @@ INSERT INTO Department (department_id, hospital, name, manager) VALUES
 INSERT INTO Employee (employee_id, employee_name, hospital, department, bio, email) VALUES
 (1, 'Dr. Sarah Connor', 1, 1, 'Lead Cardiologist with 10 years of experience', 'sarah.connor@metrohealth.com'),
 (2, 'Nurse John Carter', 1, 2, 'Experienced Pediatric Nurse', 'john.carter@metrohealth.com'),
-(3, 'Dr. Derek Shepherd', 2, 3, 'Renowned Neurosurgeon', 'derek.shepherd@greenvalley.com');
+(3, 'Dr. Derek Shepherd', 2, 3, 'Renowned Neurosurgeon', 'derek.shepherd@greenvalley.com'),
+(4, 'Dr. Meredith Grey', 2, 4, 'Expert in General Surgery with a focus on emergency cases', 'meredith.grey@greenvalley.com'),
+(5, 'Nurse Carla Espinosa', 3, 5, 'Senior Nurse with expertise in ICU and patient care', 'carla.espinosa@riverside.com'),
+(6, 'Dr. Gregory House', 3, 6, 'Diagnostic Medicine Specialist known for solving puzzling cases', 'gregory.house@riverside.com'),
+(7, 'Nurse Sam Bennett', 1, 1, 'Cardiac Nurse Specialist providing exceptional patient support', 'sam.bennett@metrohealth.com'),
+(8, 'Dr. Lisa Cuddy', 2, 2, 'Hospital Administrator with a background in endocrinology', 'lisa.cuddy@greenvalley.com'),
+(9, 'Nurse Jackie Peyton', 2, 7, 'Emergency Department nurse with a talent for efficiency under pressure', 'jackie.peyton@greenvalley.com'),
+(10, 'Dr. Chris Taub', 3, 8, 'Plastic Surgeon with a keen eye for detail and patient care', 'chris.taub@riverside.com'),
+(11, 'Nurse Haleh Adams', 1, 9, 'ER Nurse with decades of experience in fast-paced environments', 'haleh.adams@metrohealth.com'),
+(12, 'Dr. Miranda Bailey', 1, 10, 'General Surgeon with a strong leadership role in surgical residency program', 'miranda.bailey@metrohealth.com'),
+(13, 'Nurse Molly Hooper', 3, 5, 'Laboratory Specialist with a focus on pathology and research contributions', 'molly.hooper@riverside.com');
 
 -- Insert sample data into Doctor
 INSERT INTO Doctor (doctor_id, specialization, license_number) VALUES
@@ -76,17 +84,18 @@ INSERT INTO Patient (patient_id, patient_name, patient_DOB, contact_number) VALU
 (10, 'Jack Black', '1970-08-28', '555-0206');
 
 -- Insert sample data into MedicalRecord
-INSERT INTO MedicalRecord (medicalRecord_id, patient, doctor) VALUES
-(1, 1, 1),
-(2, 2, NULL),
-(3, 3, 3),
-(4, 4, 4),
-(5, 5, 5),
-(6, 6, 6),
-(7, 7, 7),
-(8, 8, 8),
-(9, 9, 9),
-(10, 10, 10);
+INSERT INTO MedicalRecord (medicalRecord_id, patient, doctor, record_date, notes) VALUES
+(1, 1, 1, '2024-01-10', 'Patient presented with symptoms of a common cold. Advised rest and hydration.'),
+(2, 2, 1, '2024-01-15', 'Follow-up visit for blood pressure monitoring. Medication adjustment needed.'),
+(3, 3, 2, '2024-02-05', 'Annual physical exam completed. All results within normal ranges.'),
+(4, 4, 3, '2024-02-20', 'Patient reports persistent headaches. MRI scheduled to rule out serious conditions.'),
+(5, 5, 3, '2024-03-10', 'Consultation for elective surgical procedure. Patient considering options.'),
+(6, 6, 2, '2024-03-15', 'Acute asthma attack. Prescribed corticosteroids and advised follow-up.'),
+(7, 7, 1, '2024-04-01', 'Routine diabetes management check. Blood sugar levels stable.'),
+(8, 8, 2, '2024-04-18', 'Patient experiencing back pain. Recommended physical therapy.'),
+(9, 9, 3, '2024-05-05', 'Pre-operative visit for scheduled surgery. Pre-op labs and EKG performed.'),
+(10, 10, 1, '2024-05-20', 'Skin rash identified as allergic reaction. Prescribed antihistamines.');
+
 
 -- Insert sample data into Prescription
 INSERT INTO Prescription (prescription_id, medical_record, medication_name) VALUES
