@@ -131,18 +131,27 @@ INSERT INTO Patient (patient_name, patient_DOB, contact_number) VALUES
 ('Quentin Stewart', '2003-05-20', '5550101019'),
 ('Rachel Green', '1979-08-09', '5550101020');
 
--- Insert sample data into the MedicalRecord table
 INSERT INTO MedicalRecord (patient, doctor, record_date, notes) VALUES
-(1, 1, '2024-05-10', 'Patient has a mild fever and sore throat. Prescribed paracetamol.'),
-(2, 2, '2024-04-25', 'Patient diagnosed with type 2 diabetes. Recommended lifestyle changes.'),
-(3, 3, '2024-03-15', 'Routine annual health checkup. No issues reported.'),
-(4, 4, '2024-02-20', 'Patient complains of persistent back pain. MRI suggested.'),
-(5, 1, '2024-01-30', 'Follow-up visit for surgical wound. Healing properly.'),
-(6, 2, '2024-03-05', 'Patient shows signs of asthma. Inhaler prescribed.'),
-(7, 3, '2024-04-10', 'Patient tested positive for COVID-19. Advised home quarantine.'),
-(8, 4, '2024-02-28', 'Minor allergic reaction to medication. Prescription updated.'),
-(9, 1, '2024-05-01', 'Patient reports severe headaches. Referred to a neurologist.'),
-(10, 2, '2024-01-15', 'Patient diagnosed with hypertension. Starting treatment with ACE inhibitors.');
+(1, 3, '2024-04-05', 'Routine dental checkup. No cavities found.'),
+(2, 1, '2024-03-12', 'Patient experiencing insomnia. Prescribed sleep aid.'),
+(3, 2, '2024-05-02', 'Patient reports increased anxiety. Referred to a psychologist.'),
+(4, 1, '2024-04-14', 'Regular follow-up for chronic back pain. Improvement noted.'),
+(5, 4, '2024-03-30', 'Routine eye examination. Vision stable.'),
+(6, 3, '2024-02-15', 'Patient reports chest pain. ECG performed. Results normal.'),
+(7, 2, '2024-01-25', 'Follow-up visit for COVID-19 recovery. Symptoms resolved.'),
+(8, 1, '2024-05-09', 'Annual physical examination. Blood work ordered.'),
+(9, 4, '2024-04-22', 'Patient reports dizziness and fatigue. Blood tests ordered.'),
+(10, 3, '2024-03-20', 'Patient diagnosed with early-stage arthritis. Physical therapy recommended.'),
+(1, 2, '2024-04-18', 'Patient complains of digestive issues. Referred to a gastroenterologist.'),
+(2, 3, '2024-05-08', 'Patient reports skin rash. Prescribed topical ointment.'),
+(3, 1, '2024-02-25', 'Patient experiencing ear pain. Diagnosed with an ear infection.'),
+(3, 2, '2024-03-28', 'Regular check-up for high blood pressure. Medication adjusted.'),
+(3, 3, '2024-01-10', 'Patient reports joint pain. Recommended supplements.'),
+(3, 4, '2024-04-12', 'Follow-up for asthma. Condition stable.'),
+(7, 1, '2024-03-18', 'Patient reports recurring migraines. MRI scheduled.'),
+(7, 2, '2024-05-05', 'Patient diagnosed with seasonal allergies. Prescribed antihistamines.'),
+(9, 3, '2024-02-22', 'Patient experiencing severe stomach pain. Ultrasound ordered.'),
+(10, 1, '2024-04-08', 'Follow-up visit for hypertension. Blood pressure improving.');
 
 -- Insert sample data into Prescription
 INSERT INTO Prescription (medical_record, medication_name) VALUES
@@ -160,12 +169,12 @@ INSERT INTO Prescription (medical_record, medication_name) VALUES
 -- Insert sample data into Appointment
 INSERT INTO Appointment (patient, doctor, equipment, appointment_date, appointment_time) VALUES
 (1, 1, 1, '2024-06-15', '09:00:00'),
-(2, 2, 2, '2024-06-16', '09:30:00'),
-(3, 3, 3, '2024-06-17', '10:00:00'),
+(2, 1, 2, '2024-06-15', '09:30:00'),
+(3, 1, 3, '2024-06-15', '10:00:00'),
 (4, 4, 4, '2024-06-18', '10:30:00'),
 (5, 5, 5, '2024-06-19', '11:00:00'),
 (6, 6, null, '2024-06-20', '11:30:00'),
-(7, 7, 7, '2024-06-21', '12:00:00'),
+(7, 1, 7, '2024-06-15', '12:00:00'),
 (8, 8, 8, '2024-06-22', '12:30:00'),
 (9, 9, 9, '2024-06-23', '13:00:00'),
 (10, 10, 10, '2024-06-24', '13:30:00');
