@@ -168,16 +168,62 @@ INSERT INTO Prescription (medical_record, medication_name) VALUES
 
 -- Insert sample data into Appointment
 INSERT INTO Appointment (patient, doctor, equipment, appointment_date, appointment_time) VALUES
+-- Patient 1 with multiple appointments
+(1, 1, 1, '2024-06-01', '09:00:00'),
+(1, 1, 1, '2024-06-08', '09:00:00'),
 (1, 1, 1, '2024-06-15', '09:00:00'),
+(1, 2, 2, '2024-06-22', '09:00:00'),
+(1, 2, 2, '2024-06-29', '09:00:00'),
+
+-- Patient 2 with multiple appointments
+(2, 3, 3, '2024-06-05', '10:00:00'),
+(2, 3, 3, '2024-06-12', '10:00:00'),
 (2, 1, 2, '2024-06-15', '09:30:00'),
-(3, 1, 3, '2024-06-15', '10:00:00'),
+(2, 4, 4, '2024-06-20', '11:00:00'),
+
+-- Patient 3 with multiple appointments
+(3, 5, 5, '2024-06-10', '11:00:00'),
+(3, 5, 5, '2024-06-15', '10:00:00'),
+(3, 6, 6, '2024-06-22', '11:00:00'),
+(3, 7, 7, '2024-06-29', '12:00:00'),
+
+-- Patient 4 with multiple appointments
+(4, 4, 4, '2024-06-01', '10:30:00'),
+(4, 4, 4, '2024-06-10', '10:30:00'),
 (4, 4, 4, '2024-06-18', '10:30:00'),
+
+-- Patient 5 with multiple appointments
+(5, 5, 5, '2024-06-03', '11:00:00'),
+(5, 5, 5, '2024-06-10', '11:00:00'),
 (5, 5, 5, '2024-06-19', '11:00:00'),
+
+-- Patient 6 with multiple appointments
+(6, 6, null, '2024-06-05', '11:30:00'),
+(6, 6, null, '2024-06-12', '11:30:00'),
 (6, 6, null, '2024-06-20', '11:30:00'),
-(7, 1, 7, '2024-06-15', '12:00:00'),
+
+-- Patient 7 with multiple appointments
+(7, 1, 7, '2024-06-01', '12:00:00'),
+(7, 2, 2, '2024-06-08', '12:30:00'),
+(7, 3, 3, '2024-06-15', '13:00:00'),
+
+-- Patient 8 with multiple appointments
+(8, 8, 8, '2024-06-04', '12:30:00'),
+(8, 8, 8, '2024-06-11', '12:30:00'),
 (8, 8, 8, '2024-06-22', '12:30:00'),
+
+-- Patient 9 with multiple appointments
+(9, 9, 9, '2024-06-02', '13:00:00'),
+(9, 9, 9, '2024-06-09', '13:00:00'),
+(9, 9, 9, '2024-06-16', '13:00:00'),
 (9, 9, 9, '2024-06-23', '13:00:00'),
+
+-- Patient 10 with multiple appointments
+(10, 10, 10, '2024-06-03', '13:30:00'),
+(10, 10, 10, '2024-06-10', '13:30:00'),
+(10, 10, 10, '2024-06-17', '13:30:00'),
 (10, 10, 10, '2024-06-24', '13:30:00');
+
 
 -- Insert sample data into InventoryManager
 INSERT INTO InventoryManager (inventory_manager_id, assigned_warehouses, areas_of_responsibility) VALUES
@@ -245,17 +291,17 @@ INSERT INTO PharmacyStaff (pharmacy_staff_id, qualifications, specialization_are
 (40, 'PharmD', 'Critical Care Pharmacy');
 
 -- Insert sample data into Medication
-INSERT INTO Medication (name, managed_by, type, expiration_date) VALUES
-('Amoxicillin', 31, 'Antibiotic', '2026-01-01'),
-('Metformin', 32, 'Antidiabetic', '2026-01-01'),
-('Simvastatin', 33, 'Cholesterol', '2026-01-01'),
-('Lisinopril', 34, 'Blood Pressure', '2026-01-01'),
-('Levothyroxine', 35, 'Thyroid', '2026-01-01'),
-('Atorvastatin', 36, 'Cholesterol', '2026-01-01'),
-('Albuterol', 37, 'Asthma', '2026-01-01'),
-('Hydrochlorothiazide', 38, 'Diuretic', '2026-01-01'),
-('Amlodipine', 39, 'Blood Pressure', '2026-01-01'),
-('Gabapentin', 40, 'Neurological Pain', '2026-01-01');
+INSERT INTO Medication (name, managed_by, type, expiration_date, stock_level) VALUES
+('Amoxicillin', 31, 'Antibiotic', '2026-01-01', 100),
+('Metformin', 32, 'Antidiabetic', '2026-01-01', 150),
+('Simvastatin', 33, 'Cholesterol', '2026-01-01', 200),
+('Lisinopril', 34, 'Blood Pressure', '2026-01-01', 120),
+('Levothyroxine', 35, 'Thyroid', '2026-01-01', 180),
+('Atorvastatin', 36, 'Cholesterol', '2026-01-01', 220),
+('Albuterol', 37, 'Asthma', '2026-01-01', 90),
+('Hydrochlorothiazide', 38, 'Diuretic', '2026-01-01', 110),
+('Amlodipine', 39, 'Blood Pressure', '2026-01-01', 130),
+('Gabapentin', 40, 'Neurological Pain', '2026-01-01', 170);
 
 -- Insert sample data into InsuranceContract
 INSERT INTO InsuranceContract (insurance_contract_id, insurance_plan, patient, annual_coverage_limit) VALUES
