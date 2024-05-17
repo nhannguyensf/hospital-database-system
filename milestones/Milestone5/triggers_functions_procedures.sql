@@ -185,3 +185,48 @@ END $$
 
 DELIMITER ;
 
+-- Get department that has doctor(s) and nurse(s) that have been working for more than 5 years
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS GetDepartmentsWithLongTenuredEmployees $$
+
+CREATE PROCEDURE GetDepartmentsWithLongTenuredEmployees()
+BEGIN
+    SELECT 
+        result.department_id,
+        result.department_name
+    FROM (
+        SELECT 
+            d.department_id,
+            d.name AS department_name
+        FROM 
+            Department d
+        JOIN 
+            Employee e ON d.department_id = e.department
+        JOIN 
+            Doctor doc ON e.employee_id = doc.doctor_id
+        WHERE 
+            TIMESTAMPDIFF(YEAR, e.hire_date, CURDATE()) > 5
+        
+        UNION
+        
+        SELECT 
+            d.department_id,
+            d.name AS department_name
+        FROM 
+            Department d
+        JOIN 
+            Employee e ON d.department_id = e.department
+        JOIN 
+            Nurse n ON e.employee_id = n.nurse_id
+        WHERE 
+            TIMESTAMPDIFF(YEAR, e.hire_date, CURDATE()) > 5
+    ) as result
+    GROUP BY 
+        result.department_id,
+        result.department_name
+    HAVING 
+        COUNT(*) > 1;
+END $$
+
+DELIMITER ;

@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `Employee` (
   `department` INT UNSIGNED NULL,
   `bio` VARCHAR(255) NULL,
   `email` VARCHAR(255) NULL,
+  `hire_date` DATE NULL,
   PRIMARY KEY (`employee_id`),
   INDEX `FK_EMPLOYEE_DEPARTMENT_idx` (`department` ASC) VISIBLE,
   INDEX `FK_EMPLOYEE_HOSPITAL_idx` (`hospital` ASC) VISIBLE,
