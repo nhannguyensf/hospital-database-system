@@ -702,10 +702,72 @@ async def _getmonthlyappointments(ctx):
     await ctx.send("Failed to retrieve monthly appointments count.")
 
 
-@bot.command(name="cmd_11",
-             description="database business requirement #11 here")
-async def _command11(ctx, *args):
-  await ctx.send("This method is not implemented yet")
+@bot.command(
+    name="getappointmentdetails",
+    description=
+    "Get detailed information of all appointments including patient, doctor, department, and equipment used"
+)
+async def _getappointmentdetails(ctx):
+  appointments = AppointmentModel.get_appointment_details()
+
+  if appointments:
+    embeds = []
+    embed = discord.Embed(
+        title="Appointment Details",
+        description="Detailed information of all appointments:",
+        color=discord.Color.blue())
+
+    for i, appointment in enumerate(appointments):
+      embed.add_field(name=f"Appointment ID: {appointment.appointment_id}",
+                      value=(f"Patient: {appointment.patient_name}\n"
+                             f"Doctor: {appointment.doctor_name}\n"
+                             f"Department: {appointment.department_name}\n"
+                             f"Equipment: {appointment.equipment_name}\n"
+                             f"Date: {appointment.appointment_date}\n"
+                             f"Time: {appointment.appointment_time}"),
+                      inline=False)
+      # If 25 fields are added or it's the last appointment, save the current embed and create a new one
+      if (i + 1) % 25 == 0 or (i + 1) == len(appointments):
+        embeds.append(embed)
+        embed = discord.Embed(
+            title="Appointment Details (continued)",
+            description="Detailed information of all appointments:",
+            color=discord.Color.blue())
+
+    for embed in embeds:
+      await ctx.send(embed=embed)
+  else:
+    embed = discord.Embed(
+        title="No Appointment Details Found",
+        description=
+        "Failed to retrieve appointment details or no appointments found.",
+        color=discord.Color.red())
+    await ctx.send(embed=embed)
+
+
+@bot.command(
+    name="getmedicationsnearexpiration",
+    description=
+    "Retrieve medications that are near their expiration date (within 30 days)"
+)
+async def _getmedicationsnearexpiration(ctx):
+  medications = MedicationModel.get_medications_near_expiration()
+  if medications:
+    embed = discord.Embed(
+        title="Medications Near Expiration",
+        description=
+        "Here are the medications that are near their expiration date (within 30 days):",
+        color=discord.Color.blue())
+    for med in medications:
+      embed.add_field(name=f"Medication: {med.name}",
+                      value=f"Expiration Date: {med.expiration_date}",
+                      inline=False)
+  else:
+    embed = discord.Embed(
+        title="No Medications Found",
+        description="There are no medications near their expiration date.",
+        color=discord.Color.blue())
+  await ctx.send(embed=embed)
 
 
 bot.run(TOKEN)

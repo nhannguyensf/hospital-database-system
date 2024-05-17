@@ -275,6 +275,18 @@ class PatientModel(ModelInterface):
       )
       return None
 
+  @staticmethod
+  def get_medical_history(patient_id):
+    try:
+      history_data = Database.select(Query.CALL_GET_PATIENT_MEDICAL_HISTORY,
+                                     (patient_id, ))
+      return history_data
+    except DatabaseError as db_err:
+      print(
+          f"Failed to retrieve medical history for patient with ID {patient_id}. Error: {db_err}"
+      )
+      return None
+
 
 class DoctorModel(ModelInterface):
   """ Model class for Doctor """
@@ -416,6 +428,23 @@ class MedicationModel(ModelInterface):
       )
       return False
 
+  @staticmethod
+  def get_medications_near_expiration():
+    try:
+      results = Database.select(Query.GET_MEDICATIONS_NEAR_EXPIRATION)
+      if results:
+        medications = []
+        for row in results:
+          medication = MedicationModel()
+          medication.name = row['name']
+          medication.expiration_date = row['expiration_date']
+          medications.append(medication)
+        return medications
+      return None
+    except DatabaseError as db_err:
+      print(f"Failed to retrieve medications near expiration. Error: {db_err}")
+      return None
+
 
 class AppointmentModel(ModelInterface):
 
@@ -423,9 +452,13 @@ class AppointmentModel(ModelInterface):
     super().__init__()
     self.doctor_name = None
     self.appointments = []
-    """Usage example: 
-    appointments = AppointmentModel.get_doctor_schedule_for_day(1, 2023-05-15)
-    """
+    self.appointment_id = None
+    self.patient_name = None
+    self.doctor_name = None
+    self.department_name = None
+    self.equipment_name = None
+    self.appointment_date = None
+    self.appointment_time = None
 
   @staticmethod
   def get_monthly_appointments_count():
@@ -468,6 +501,28 @@ class AppointmentModel(ModelInterface):
       return appointment_model
     except DatabaseError as db_err:
       print(f"Failed to retrieve schedule. Error: {db_err}")
+      return None
+
+  @staticmethod
+  def get_appointment_details():
+    try:
+      results = Database.select(Query.GET_APPOINTMENT_DETAILS)
+      if results is None:
+        return None
+      appointments = []
+      for row in results:
+        appointment = AppointmentModel()
+        appointment.appointment_id = row['appointment_id']
+        appointment.patient_name = row['patient_name']
+        appointment.doctor_name = row['doctor_name']
+        appointment.department_name = row['department_name']
+        appointment.equipment_name = row['equipment_name']
+        appointment.appointment_date = row['appointment_date']
+        appointment.appointment_time = row['appointment_time']
+        appointments.append(appointment)
+      return appointments
+    except DatabaseError as db_err:
+      print(f"Failed to retrieve appointment details. Error: {db_err}")
       return None
 
 

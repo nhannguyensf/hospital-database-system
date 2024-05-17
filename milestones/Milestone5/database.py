@@ -240,3 +240,41 @@ class Query:
   CALL_GET_TOTAL_MEDICATIONS_MANAGED_BY_EACH_PHARMACY_STAFF = """CALL GetTotalMedicationsManagedByEachPharmacyStaff()"""
 
   CALL_GET_MONTHLY_APPOINTMENTS_COUNT = """CALL GetMonthlyAppointmentsCount()"""
+
+  CALL_GET_PATIENT_MEDICAL_HISTORY = """CALL GetPatientMedicalHistory(%s)"""
+
+  GET_APPOINTMENT_DETAILS = """
+  SELECT 
+      Appointment.appointment_id,
+      Patient.patient_name,
+      Employee.employee_name AS doctor_name,
+      Department.name AS department_name,
+      Equipment.name AS equipment_name,
+      Appointment.appointment_date,
+      Appointment.appointment_time
+  FROM 
+      Appointment
+  JOIN 
+      Patient ON Appointment.patient = Patient.patient_id
+  LEFT JOIN 
+      Doctor ON Appointment.doctor = Doctor.doctor_id
+  LEFT JOIN 
+      Employee ON Doctor.doctor_id = Employee.employee_id
+  LEFT JOIN 
+      Equipment ON Appointment.equipment = Equipment.equipment_id
+  LEFT JOIN 
+      Department ON Equipment.department = Department.department_id
+  ORDER BY 
+      Appointment.appointment_date, Appointment.appointment_time;
+  """
+
+  # Query to retrieve medications that are near expiration (within 30 days)
+  GET_MEDICATIONS_NEAR_EXPIRATION = """
+  SELECT 
+      m.name,
+      m.expiration_date
+  FROM 
+      Medication m
+  HAVING 
+      m.expiration_date < CURDATE() + INTERVAL 30 DAY
+  """
