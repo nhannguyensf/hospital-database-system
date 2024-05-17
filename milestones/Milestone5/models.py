@@ -428,6 +428,15 @@ class AppointmentModel(ModelInterface):
     """
 
   @staticmethod
+  def get_monthly_appointments_count():
+    try:
+      results = Database.select(Query.CALL_GET_MONTHLY_APPOINTMENTS_COUNT)
+      return results
+    except DatabaseError as db_err:
+      print(f"Failed to retrieve monthly appointments count. Error: {db_err}")
+      return None
+
+  @staticmethod
   def get_doctor_schedule_for_day(doctor_id, schedule_date):
     try:
       # Call the stored procedure using the static method
@@ -488,5 +497,20 @@ class InsurancePlanModel(ModelInterface):
     except DatabaseError as db_err:
       print(
           f"Failed to retrieve patient count for insurance plan ID {insurance_plan_id}. Error: {db_err}"
+      )
+      return None
+
+
+class PharmacyStaffModel(ModelInterface):
+
+  @staticmethod
+  def get_total_medications_managed_by_each_pharmacy_staff():
+    try:
+      results = Database.select(
+          Query.CALL_GET_TOTAL_MEDICATIONS_MANAGED_BY_EACH_PHARMACY_STAFF)
+      return results
+    except DatabaseError as db_err:
+      print(
+          f"Failed to retrieve total medications managed by each pharmacy staff. Error: {db_err}"
       )
       return None

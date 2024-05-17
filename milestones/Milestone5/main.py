@@ -657,33 +657,54 @@ async def _getlongtenuredepartments(ctx):
     )
 
 
+@bot.command(
+    name="gettotalmedicationsbystaff",
+    description=
+    "Get the total number of medications managed by each pharmacy staff member"
+)
+async def _gettotalmedicationsbystaff(ctx):
+  medications = PharmacyStaffModel.get_total_medications_managed_by_each_pharmacy_staff(
+  )
+
+  if medications:
+    embed = discord.Embed(
+        title="Total Medications Managed by Each Pharmacy Staff",
+        description=
+        "Here are the total number of medications managed by each pharmacy staff member:",
+        color=discord.Color.blue())
+    for staff in medications:
+      embed.add_field(
+          name=f"Pharmacy Staff ID: {staff['pharmacy_staff_id']}",
+          value=
+          f"Name: {staff['pharmacy_staff_name']}\nTotal Medications Managed: {staff['total_medications_managed']}",
+          inline=False)
+    await ctx.send(embed=embed)
+  else:
+    await ctx.send(
+        "No medications found for any pharmacy staff or an error occurred.")
+
+
+@bot.command(name="getmonthlyappointments",
+             description="Get the count of appointments for each month")
+async def _getmonthlyappointments(ctx):
+  monthly_appointments = AppointmentModel.get_monthly_appointments_count()
+  if monthly_appointments:
+    embed = discord.Embed(
+        title="Monthly Appointments Count",
+        description="The count of appointments for each month:",
+        color=discord.Color.blue())
+    for record in monthly_appointments:
+      embed.add_field(name=f"Month: {record['month']}",
+                      value=f"Appointments: {record['appointment_count']}",
+                      inline=False)
+    await ctx.send(embed=embed)
+  else:
+    await ctx.send("Failed to retrieve monthly appointments count.")
+
+
 @bot.command(name="cmd_11",
              description="database business requirement #11 here")
 async def _command11(ctx, *args):
-  await ctx.send("This method is not implemented yet")
-
-
-@bot.command(name="cmd_12",
-             description="database business requirement #12 here")
-async def _command12(ctx, *args):
-  await ctx.send("This method is not implemented yet")
-
-
-@bot.command(name="cmd_13",
-             description="database business requirement #13 here")
-async def _command13(ctx, *args):
-  await ctx.send("This method is not implemented yet")
-
-
-@bot.command(name="cmd_14",
-             description="database business requirement #14 here")
-async def _command14(ctx, *args):
-  await ctx.send("This method is not implemented yet")
-
-
-@bot.command(name="cmd_15",
-             description="database business requirement #15 here")
-async def _command15(ctx, *args):
   await ctx.send("This method is not implemented yet")
 
 

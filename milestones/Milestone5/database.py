@@ -236,3 +236,7 @@ class Query:
   CALL_GET_PATIENT_COUNT_BY_INSURANCE_PLAN = """CALL GetPatientCountByInsurancePlan(%s)"""
 
   CALL_GET_DEPARTMENTS_WITH_LONG_TENURED_EMPLOYEES = """CALL GetDepartmentsWithLongTenuredEmployees()"""
+
+  CALL_GET_TOTAL_MEDICATIONS_MANAGED_BY_EACH_PHARMACY_STAFF = """CALL GetTotalMedicationsManagedByEachPharmacyStaff()"""
+
+  CALL_GET_MONTHLY_APPOINTMENTS_COUNT = """CALL GetMonthlyAppointmentsCount()"""
