@@ -146,7 +146,7 @@ class Query:
     LEFT JOIN Hospital h ON e.hospital = h.hospital_id
     LEFT JOIN Department d ON e.department = d.department_id
   WHERE employee_id = %s
-"""
+  """
 
   # Query for adding a new hospital to the table
   INSERT_HOSPITAL = """INSERT INTO Hospital (name, location) VALUES (%s, %s)"""
@@ -172,7 +172,7 @@ class Query:
       PharmacyStaff ps ON m.managed_by = ps.pharmacy_staff_id
   LEFT JOIN 
       Employee e ON ps.pharmacy_staff_id = e.employee_id
-"""
+  """
 
   # Select a medication record by its ID from the database.
   GET_MEDICATION_BY_ID = """SELECT 
@@ -196,3 +196,35 @@ class Query:
   SET stock_level = %s 
   WHERE medication_id = %s
   """
+  # Add queries for Doctor
+  GET_DOCTOR_BY_ID = """SELECT
+      doctor_id,
+      specialization,
+      license_number
+  FROM
+      Doctor
+  WHERE 
+      doctor_id = %s
+  """
+
+  GET_ALL_DOCTORS = """SELECT 
+      doctor_id,
+      specialization,
+      license_number
+  FROM
+      Doctor
+  """
+
+  INSERT_DOCTOR = """INSERT INTO Doctor (doctor_id, specialization, license_number) 
+                     VALUES (%s, %s, %s)
+  """
+
+  DELETE_DOCTOR = """DELETE FROM Doctor 
+                     WHERE doctor_id = %s
+  """
+
+  GET_READMISSION_INFO = """CALL GetReadmissionInfo(%s)"""
+
+  CALL_GET_PATIENT_DETAILS = """CALL GetPatientDetails(%s)"""
+
+  CALL_GET_EMPLOYEE_COUNT_BY_DEPARTMENT = """SELECT GetEmployeeCountByDepartment(%s) AS emp_count"""

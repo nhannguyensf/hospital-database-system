@@ -81,14 +81,33 @@ async def _gethospitalbyID(ctx, arg1):
 
 
 @bot.command(name="getemployeebyID",
-             description="Get infomation of an employee using employee's id")
-async def _getemployeebyID(ctx, arg1):
-  employee = EmployeeModel.get(arg1)
+             description="Get information of an employee using employee's id")
+async def _getemployeebyID(ctx, arg1: str = None):
+  if arg1 is None:
+    response = "Please provide a valid employee ID. Usage: `!getemployeebyID <employee_id>`"
+    await ctx.send(response)
+    return
+  # Check if arg1 is a valid integer
+  try:
+    employee_id = int(arg1)
+  except ValueError:
+    response = "The provided employee ID is not a valid integer. Usage: `!getemployeebyID <employee_id>`"
+    await ctx.send(response)
+    return
+  employee = EmployeeModel.get(employee_id)
   if employee is None:
-    response = f"There is no information available for the employee with ID {arg1}."
+    response = f"There is no information available for the employee with ID {employee_id}."
+    await ctx.send(response)
   else:
-    response = f"Here's the information of employee with ID {employee.employee_id}: \n\n -Name: {employee.employee_name} \n -Hospital: {employee.hospital} \n -Department: {employee.department} \n -Bio: {employee.bio} \n -Email: {employee.email}"
-  await ctx.send(response)
+    embed = discord.Embed(
+        title=f"Employee Information (ID: {employee.employee_id})",
+        color=discord.Color.blue())
+    embed.add_field(name="Name", value=employee.employee_name, inline=False)
+    embed.add_field(name="Hospital", value=employee.hospital, inline=False)
+    embed.add_field(name="Department", value=employee.department, inline=False)
+    embed.add_field(name="Bio", value=employee.bio, inline=False)
+    embed.add_field(name="Email", value=employee.email, inline=False)
+    await ctx.send(embed=embed)
 
 
 @bot.command(name="addhospital",
@@ -175,13 +194,26 @@ async def _getallpatient(ctx, *args):
 
 @bot.command(name="getpatientbyID",
              description="Get information of a patient using patient's id")
-async def _getpatientbyID(ctx, patient_id: int):
-  patient = PatientModel.get(patient_id)
+async def _getpatientbyID(ctx, patient_id: str = None):
+  if patient_id is None:
+    response = "Please provide a valid patient ID. Usage: `!getpatientbyID <patient_id>`"
+    await ctx.send(response)
+    return
+
+  # Check if patient_id is a valid integer
+  try:
+    patient_id_int = int(patient_id)
+  except ValueError:
+    response = "The provided patient ID is not a valid integer. Usage: `!getpatientbyID <patient_id>`"
+    await ctx.send(response)
+    return
+
+  patient = PatientModel.get(patient_id_int)
   if patient:
     embed = discord.Embed(
-        title=f"Patient Information for ID {patient_id}",
+        title=f"Patient Information for ID {patient_id_int}",
         description=
-        f"Here is the information for the patient with ID {patient_id}:",
+        f"Here is the information for the patient with ID {patient_id_int}:",
         color=discord.Color.blue())
     embed.add_field(name="Name", value=patient.patient_name, inline=False)
     embed.add_field(name="Date of Birth",
@@ -190,11 +222,111 @@ async def _getpatientbyID(ctx, patient_id: int):
     embed.add_field(name="Contact", value=patient.contact_number, inline=False)
   else:
     embed = discord.Embed(
-        title=f"No Information Found for Patient ID {patient_id}",
+        title=f"No Information Found for Patient ID {patient_id_int}",
         description=
-        f"No information is available for the patient with ID {patient_id}.",
+        f"No information is available for the patient with ID {patient_id_int}.",
         color=discord.Color.blue())
   await ctx.send(embed=embed)
+
+
+@bot.command(name="getreadmissioninfo",
+             description="Get readmission information for a specific patient")
+async def _getreadmissioninfo(ctx, patient_id: int):
+  readmission_info = PatientModel.get_readmission_info(patient_id)
+  if readmission_info:
+    embed = discord.Embed(
+        title=f"Readmission Information for Patient ID {patient_id}",
+        description="Here are the readmission details:",
+        color=discord.Color.blue())
+    for entry in readmission_info:
+      embed.add_field(
+          name=f"First Appointment Date: {entry['first_appointment_date']}",
+          value=
+          f"Readmission Date: {entry['readmission_date']}\nDays Between: {entry['days_between']}",
+          inline=False)
+  else:
+    embed = discord.Embed(
+        title=f"No Readmission Information Found for Patient ID {patient_id}",
+        description=
+        f"No readmission details are available for the patient with ID {patient_id}.",
+        color=discord.Color.blue())
+  await ctx.send(embed=embed)
+
+
+@bot.command(
+    name="getpatientdetails",
+    description=
+    "Get patient information, medical records, and insurance information by patient ID"
+)
+async def _getpatientdetails(ctx, patient_id: str = None):
+  if patient_id is None:
+    response = "Please provide a valid patient ID. Usage: `!getpatientbyID <patient_id>`"
+    await ctx.send(response)
+    return
+  # Check if patient_id is a valid integer
+  try:
+    patient_id_int = int(patient_id)
+  except ValueError:
+    response = "The provided patient ID is not a valid integer. Usage: `!getpatientbyID <patient_id>`"
+    await ctx.send(response)
+    return
+  details = PatientModel.get_patient_details(patient_id_int)
+  if details and len(details) > 0:
+    # Extract common patient information
+    patient_info = details[0]
+    embed = discord.Embed(
+        title=f"Patient Information for ID {patient_id_int}",
+        description=
+        "Patient information, medical records, and insurance information:",
+        color=discord.Color.blue())
+
+    embed.add_field(name="Patient ID",
+                    value=patient_info['patient_id'],
+                    inline=False)
+    embed.add_field(name="Name",
+                    value=patient_info['patient_name'],
+                    inline=False)
+    embed.add_field(name="Date of Birth",
+                    value=patient_info['patient_DOB'],
+                    inline=False)
+    embed.add_field(name="Contact",
+                    value=patient_info['contact_number'],
+                    inline=False)
+
+    # Iterate through the details to find medical records and insurance information
+    for patient_info in details:
+      # Add a dashed line before the next iteration
+      embed.add_field(name="\u200b",
+                      value="----------------------------",
+                      inline=False)
+      # Medical records
+      if patient_info['medicalRecord_id']:
+        embed.add_field(
+            name="Medical Record",
+            value=(f"Medical Record ID: {patient_info['medicalRecord_id']}\n"
+                   f"Doctor ID: {patient_info['doctor_id']}\n"
+                   f"Record Date: {patient_info['record_date']}\n"
+                   f"Notes: {patient_info['notes']}"),
+            inline=False)
+      # Insurance information
+      if patient_info['insurance_record_id']:
+        embed.add_field(
+            name="Insurance Information",
+            value=
+            (f"Insurance Record ID: {patient_info['insurance_record_id']}\n"
+             f"Plan Name: {patient_info['plan_name']}\n"
+             f"Provider: {patient_info['provider']}\n"
+             f"Expiration Date: {patient_info['insurance_expiration_date']}\n"
+             f"Policy: {patient_info['policy']}"),
+            inline=False)
+    await ctx.send(embed=embed)
+  else:
+    embed = discord.Embed(
+        title=f"No Information Found for Patient ID {patient_id_int}",
+        description=
+        f"No details are available for the patient with ID {patient_id_int}.",
+        color=discord.Color.red())
+    await ctx.send(embed=embed)
 
 
 @bot.command(name="getallmedication",
@@ -259,8 +391,15 @@ async def _getmedicationbyID(ctx, medication_id: int):
 @bot.command(name="increasestock",
              description="Increase a medication's stock level")
 async def _increasestock(ctx, medication_id: int, amount: int):
+  if amount <= 0:
+    embed = discord.Embed(title="Error",
+                          description="The amount must be a positive integer.",
+                          color=discord.Color.red())
+    await ctx.send(embed=embed)
+    return
+
   medication = MedicationModel.get(medication_id)
-  if medication:
+  if medication and isinstance(medication.stock_level, int):
     new_stock_level = medication.stock_level + amount
     success = MedicationModel.update_stock_level(medication_id,
                                                  new_stock_level)
@@ -279,7 +418,8 @@ async def _increasestock(ctx, medication_id: int, amount: int):
   else:
     embed = discord.Embed(
         title="Error",
-        description=f"Medication with ID {medication_id} not found.",
+        description=
+        f"Medication with ID {medication_id} not found or invalid stock level.",
         color=discord.Color.red())
   await ctx.send(embed=embed)
 
@@ -287,8 +427,15 @@ async def _increasestock(ctx, medication_id: int, amount: int):
 @bot.command(name="decreasestock",
              description="Decrease a medication's stock level")
 async def _decreasestock(ctx, medication_id: int, amount: int):
+  if amount <= 0:
+    embed = discord.Embed(title="Error",
+                          description="The amount must be a positive integer.",
+                          color=discord.Color.red())
+    await ctx.send(embed=embed)
+    return
+
   medication = MedicationModel.get(medication_id)
-  if medication:
+  if medication and isinstance(medication.stock_level, int):
     new_stock_level = max(medication.stock_level - amount, 0)
     success = MedicationModel.update_stock_level(medication_id,
                                                  new_stock_level)
@@ -298,16 +445,100 @@ async def _decreasestock(ctx, medication_id: int, amount: int):
           description=
           f"The stock level for medication ID {medication_id} has been decreased by {amount}. New stock level: {new_stock_level}",
           color=discord.Color.green())
+      await ctx.send(embed=embed)
+
+      if new_stock_level < 50:
+        alert_embed = discord.Embed(
+            title="Alert",
+            description=
+            f"Warning: The stock level for medication ID {medication_id} is below 50. Current stock level: {new_stock_level}",
+            color=discord.Color.orange())
+        await ctx.send(embed=alert_embed)
     else:
       embed = discord.Embed(
           title="Error",
           description=
           f"Failed to update the stock level for medication ID {medication_id}.",
           color=discord.Color.red())
+      await ctx.send(embed=embed)
   else:
     embed = discord.Embed(
         title="Error",
-        description=f"Medication with ID {medication_id} not found.",
+        description=
+        f"Medication with ID {medication_id} not found or invalid stock level.",
+        color=discord.Color.red())
+    await ctx.send(embed=embed)
+
+
+@bot.command(name="getalldoctor",
+             description="Get the data of all doctors in the database")
+async def _getalldoctor(ctx):
+  doctors = DoctorModel.get_all()
+  if doctors:
+    embed = discord.Embed(
+        title="All Doctors",
+        description="Here are all the doctors in the database:",
+        color=discord.Color.blue())
+    for doctor in doctors:
+      embed.add_field(
+          name=f"Doctor ID: {doctor.doctor_id}",
+          value=
+          f"Specialization: {doctor.specialization}\nLicense Number: {doctor.license_number}",
+          inline=False)
+  else:
+    embed = discord.Embed(title="No Doctors Found",
+                          description="There are no doctors in the database.",
+                          color=discord.Color.blue())
+  await ctx.send(embed=embed)
+
+
+@bot.command(name="deletedoctor",
+             description="Delete a doctor using doctor's id")
+async def _deletedoctor(ctx, doctor_id: int):
+  doctor = DoctorModel.get(doctor_id)
+  if doctor:
+    success = doctor.delete()
+    if success:
+      response = f"Doctor with ID {doctor_id} has been successfully deleted."
+    else:
+      response = f"Failed to delete doctor with ID {doctor_id}."
+  else:
+    response = f"No doctor found with ID {doctor_id}."
+  await ctx.send(response)
+
+
+@bot.command(
+    name="getemployeecountbydepartment",
+    description=
+    "Get the number of employees in a specific department by department ID")
+async def _getemployeecountbydepartment(ctx, department_id: str = None):
+  if department_id is None:
+    response = "Please provide a valid department ID. Usage: `!getemployeecountbydepartment <department_id>`"
+    await ctx.send(response)
+    return
+
+  # Check if department_id is a valid integer
+  try:
+    department_id_int = int(department_id)
+  except ValueError:
+    response = "The provided department ID is not a valid integer. Usage: `!getemployeecountbydepartment <department_id>`"
+    await ctx.send(response)
+    return
+
+  employee_count = EmployeeModel.get_employee_count_by_department(
+      department_id_int)
+
+  if employee_count is not None:
+    embed = discord.Embed(
+        title=f"Employee Count for Department ID {department_id_int}",
+        description=
+        f"The number of employees in department ID {department_id_int} is {employee_count}.",
+        color=discord.Color.blue())
+  else:
+    embed = discord.Embed(
+        title=f"No Information Found for Department ID {department_id_int}",
+        description=
+        f"No employee count information is available for the department with ID {department_id_int}.",
         color=discord.Color.red())
   await ctx.send(embed=embed)
 

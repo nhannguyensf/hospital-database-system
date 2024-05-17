@@ -157,6 +157,21 @@ class EmployeeModel(ModelInterface):
       )
       return None
 
+  @staticmethod
+  def get_employee_count_by_department(department_id):
+    try:
+      results = Database.select(Query.CALL_GET_EMPLOYEE_COUNT_BY_DEPARTMENT,
+                                (department_id, ))
+      if results:
+        count = results[0]['emp_count']
+        return count
+      return 0
+    except DatabaseError as db_err:
+      print(
+          f"Failed to retrieve employee count for department ID {department_id}. Error: {db_err}"
+      )
+      return None
+
 
 class PatientModel(ModelInterface):
   """Usage example: 
@@ -206,8 +221,101 @@ class PatientModel(ModelInterface):
       print(f"Failed to retrieve patients. Error: {db_err}")
       return None
 
+  @staticmethod
+  def get_readmission_info(patient_id):
+    try:
+      readmission_data = Database.select(Query.GET_READMISSION_INFO,
+                                         (patient_id, ))
+      if readmission_data:
+        return readmission_data
+      return None
+    except DatabaseError as db_err:
+      print(
+          f"Failed to retrieve readmission info for patient with ID {patient_id}. Error: {db_err}"
+      )
+      return None
 
-# class DoctorModel:
+  @staticmethod
+  def get_patient_details(patient_id):
+    try:
+      details = Database.select(Query.CALL_GET_PATIENT_DETAILS, (patient_id, ))
+      if details:
+        return details
+      return None
+    except DatabaseError as db_err:
+      print(
+          f"Failed to retrieve details for patient ID {patient_id}. Error: {db_err}"
+      )
+      return None
+
+
+class DoctorModel(ModelInterface):
+  """ Model class for Doctor """
+
+  def __init__(self, doctor_id=None):
+    super().__init__()
+    self.doctor_id = doctor_id
+    self.specialization = None
+    self.license_number = None
+
+  @staticmethod
+  def get(doctor_id):
+    try:
+      doctor_data = Database.select(Query.GET_DOCTOR_BY_ID, (doctor_id, ))
+      if doctor_data:
+        row = doctor_data[0]
+        doctor = DoctorModel(row['doctor_id'])
+        doctor.specialization = row['specialization']
+        doctor.license_number = row['license_number']
+        return doctor
+      return None
+    except DatabaseError as db_err:
+      print(f"Failed to retrieve doctor with ID {doctor_id}. Error: {db_err}")
+      return None
+
+  @staticmethod
+  def get_all():
+    try:
+      doctors_data = Database.select(Query.GET_ALL_DOCTORS)
+      doctors = []
+      if doctors_data:
+        for row in doctors_data:
+          doctor = DoctorModel(row['doctor_id'])
+          doctor.specialization = row['specialization']
+          doctor.license_number = row['license_number']
+          doctors.append(doctor)
+      return doctors
+    except DatabaseError as db_err:
+      print(f"Failed to retrieve doctors. Error: {db_err}")
+      return None
+
+  @staticmethod
+  def add(data):
+    doctor_id = data.get('doctor_id')
+    specialization = data.get('specialization')
+    license_number = data.get('license_number')
+    try:
+      new_id = Database.insert_and_return_new_id(
+          Query.INSERT_DOCTOR, (doctor_id, specialization, license_number))
+      if new_id:
+        new_doctor = DoctorModel(new_id)
+        new_doctor.specialization = specialization
+        new_doctor.license_number = license_number
+        return new_doctor
+      return None
+    except DatabaseError as db_err:
+      print(f"Failed to add doctor to the database. Error: {db_err}")
+      return None
+
+  def delete(self):
+    try:
+      Database.delete(Query.DELETE_DOCTOR, (self.doctor_id, ))
+      self.was_deleted = True
+      return True
+    except DatabaseError as db_err:
+      print(
+          f"Failed to delete doctor with ID {self.doctor_id}. Error: {db_err}")
+      return False
 
 
 class MedicationModel(ModelInterface):
