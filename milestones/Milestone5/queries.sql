@@ -9,6 +9,7 @@ Select * from MedicalRecord;
 Select * from Appointment;
 Select * from Medication;
 
+CALL GetMonthlyAppointmentsCount();
 CALL GetDepartmentsWithLongTenuredEmployees();
 
 CALL GetEquipmentUtilizationRates('2024-06-01', '2025-01-31');
