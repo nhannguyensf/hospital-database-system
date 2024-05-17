@@ -9,9 +9,46 @@ Select * from MedicalRecord;
 Select * from Appointment;
 Select * from Medication;
 
+SELECT 
+      m.name,
+      m.expiration_date
+  FROM 
+      Medication m
+  HAVING 
+      m.expiration_date < CURDATE() + INTERVAL 30 DAY;
+
+
+SELECT name, managed_by, type, expiration_date, stock_level
+FROM Medication
+WHERE expiration_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY);
+
+
+SELECT 
+      Appointment.appointment_id,
+      Patient.patient_name,
+      Employee.employee_name AS doctor_name,
+      Department.name AS department_name,
+      Equipment.name AS equipment_name,
+      Appointment.appointment_date,
+      Appointment.appointment_time
+  FROM 
+      Appointment
+  JOIN 
+      Patient ON Appointment.patient = Patient.patient_id
+  LEFT JOIN 
+      Doctor ON Appointment.doctor = Doctor.doctor_id
+  LEFT JOIN 
+      Employee ON Doctor.doctor_id = Employee.employee_id
+  LEFT JOIN 
+      Equipment ON Appointment.equipment = Equipment.equipment_id
+  LEFT JOIN 
+      Department ON Equipment.department = Department.department_id
+  ORDER BY 
+      Appointment.appointment_date, Appointment.appointment_time;
+
+
 CALL GetMonthlyAppointmentsCount();
 CALL GetDepartmentsWithLongTenuredEmployees();
-
 CALL GetEquipmentUtilizationRates('2024-06-01', '2025-01-31');
 CALL GetDepartmentsByAppointmentCount();
 CALL GetPatientCountByInsurancePlan (2);

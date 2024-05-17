@@ -301,7 +301,17 @@ INSERT INTO Medication (name, managed_by, type, expiration_date, stock_level) VA
 ('Albuterol', 37, 'Asthma', '2026-01-01', 90),
 ('Hydrochlorothiazide', 38, 'Diuretic', '2026-01-01', 110),
 ('Amlodipine', 39, 'Blood Pressure', '2026-01-01', 130),
-('Gabapentin', 40, 'Neurological Pain', '2026-01-01', 170);
+('Gabapentin', 40, 'Neurological Pain', '2026-01-01', 170),
+('Ibuprofen', 31, 'Pain Reliever', '2024-05-15', 80),
+('Omeprazole', 32, 'Antacid', '2024-05-20', 75),
+('Citalopram', 33, 'Antidepressant', '2024-05-25', 60),
+('Losartan', 34, 'Blood Pressure', '2024-05-30', 95),
+('Montelukast', 35, 'Asthma', '2024-06-01', 85),
+('Fluticasone', 36, 'Allergy', '2024-06-05', 50),
+('Warfarin', 37, 'Anticoagulant', '2024-06-10', 70),
+('Doxycycline', 38, 'Antibiotic', '2024-06-15', 65),
+('Furosemide', 39, 'Diuretic', '2024-06-20', 90),
+('Clopidogrel', 40, 'Antiplatelet', '2024-06-25', 55);
 
 -- Insert sample data into InsuranceContract
 INSERT INTO InsuranceContract (insurance_contract_id, insurance_plan, patient, annual_coverage_limit) VALUES

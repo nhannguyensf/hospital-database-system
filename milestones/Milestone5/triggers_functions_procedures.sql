@@ -270,3 +270,60 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+-- Retrieves a patient's complete medical history
+DELIMITER $$
+DROP PROCEDURE IF EXISTS GetPatientMedicalHistory $$
+CREATE PROCEDURE GetPatientMedicalHistory(IN patient_id INT)
+BEGIN
+    -- Retrieve past medical history
+    SELECT 
+        a.appointment_id,
+        a.appointment_date,
+        a.appointment_time,
+        d.employee_name AS doctor_name,
+        e.name AS equipment_name,
+        mr.medicalRecord_id,
+        mr.record_date,
+        mr.notes,
+        p.prescription_id,
+        pm.name AS medication_name,
+        pm.dosage,
+        pm.frequency
+    FROM
+        Appointment a
+            LEFT JOIN
+        Doctor d ON a.doctor = d.doctor_id
+            LEFT JOIN
+        Equipment e ON a.equipment = e.equipment_id
+            LEFT JOIN
+        MedicalRecord mr ON a.patient = mr.patient
+            LEFT JOIN
+        Prescription p ON mr.medicalRecord_id = p.medical_record
+            LEFT JOIN
+        Medication pm ON p.prescription_id = pm.prescription_id
+    WHERE
+        a.patient = patient_id
+    ORDER BY a.appointment_date, a.appointment_time;
+    
+    -- Retrieve upcoming appointments
+    SELECT 
+        a.appointment_id,
+        a.appointment_date,
+        a.appointment_time,
+        d.employee_name AS doctor_name,
+        e.name AS equipment_name
+    FROM
+        Appointment a
+            LEFT JOIN
+        Doctor d ON a.doctor = d.doctor_id
+            LEFT JOIN
+        Equipment e ON a.equipment = e.equipment_id
+    WHERE
+        a.patient = patient_id
+        AND a.appointment_date >= CURDATE()
+    ORDER BY a.appointment_date, a.appointment_time;
+END $$
+
+DELIMITER ;
+
