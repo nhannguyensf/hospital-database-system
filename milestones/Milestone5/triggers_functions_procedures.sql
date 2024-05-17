@@ -167,3 +167,21 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+-- Procedure to count the number of patients subscribed to a specific insurance plan
+DELIMITER $$
+DROP PROCEDURE IF EXISTS GetPatientCountByInsurancePlan $$
+CREATE PROCEDURE GetPatientCountByInsurancePlan(IN insurance_plan_id INT)
+BEGIN
+    SELECT 
+        ip.plan_name,
+        COUNT(ir.patient) AS patient_count
+    FROM 
+        InsuranceRecord ir
+        JOIN InsurancePlan ip ON ir.insurance_plan = ip.insurance_plan_id
+    WHERE 
+        ir.insurance_plan = insurance_plan_id;
+END $$
+
+DELIMITER ;
+

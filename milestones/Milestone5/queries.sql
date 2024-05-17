@@ -11,7 +11,7 @@ Select * from Medication;
 
 CALL GetEquipmentUtilizationRates('2024-06-01', '2025-01-31');
 CALL GetDepartmentsByAppointmentCount();
-
+CALL GetPatientCountByInsurancePlan (2);
 CALL GetPatientDetails(1);
 
 CALL GetEmployeeCountByDepartment(1, @emp_count); 
