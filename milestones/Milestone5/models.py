@@ -135,6 +135,18 @@ class DepartmentModel(ModelInterface):
       )
       return None
 
+  @staticmethod
+  def get_departments_with_long_tenured_employees():
+    try:
+      results = Database.select(
+          Query.CALL_GET_DEPARTMENTS_WITH_LONG_TENURED_EMPLOYEES)
+      return results
+    except DatabaseError as db_err:
+      print(
+          f"Failed to retrieve departments with long-tenured employees. Error: {db_err}"
+      )
+      return None
+
 
 class EmployeeModel(ModelInterface):
 
@@ -467,11 +479,14 @@ class InsurancePlanModel(ModelInterface):
 
   @staticmethod
   def get_patient_count_by_insurance_plan(insurance_plan_id):
-      try:
-          results = Database.select(Query.CALL_GET_PATIENT_COUNT_BY_INSURANCE_PLAN, (insurance_plan_id,))
-          if results:
-              return results[0]
-          return None
-      except DatabaseError as db_err:
-          print(f"Failed to retrieve patient count for insurance plan ID {insurance_plan_id}. Error: {db_err}")
-          return None
+    try:
+      results = Database.select(Query.CALL_GET_PATIENT_COUNT_BY_INSURANCE_PLAN,
+                                (insurance_plan_id, ))
+      if results:
+        return results[0]
+      return None
+    except DatabaseError as db_err:
+      print(
+          f"Failed to retrieve patient count for insurance plan ID {insurance_plan_id}. Error: {db_err}"
+      )
+      return None

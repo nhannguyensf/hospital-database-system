@@ -234,3 +234,5 @@ class Query:
   CALL_GET_DEPARTMENTS_BY_APPOINTMENT_COUNT = """CALL GetDepartmentsByAppointmentCount()"""
 
   CALL_GET_PATIENT_COUNT_BY_INSURANCE_PLAN = """CALL GetPatientCountByInsurancePlan(%s)"""
+
+  CALL_GET_DEPARTMENTS_WITH_LONG_TENURED_EMPLOYEES = """CALL GetDepartmentsWithLongTenuredEmployees()"""

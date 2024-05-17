@@ -632,10 +632,29 @@ async def _getpatientcountbyinsurance(ctx, insurance_plan_id: str):
         "Invalid insurance plan ID format. Please provide a valid integer.")
 
 
-@bot.command(name="cmd_10",
-             description="database business requirement #10 here")
-async def _command10(ctx, *args):
-  await ctx.send("This method is not implemented yet")
+@bot.command(
+    name="getlongtenuredepartments",
+    description=
+    "Get departments with doctors and nurses who have been employed for more than 5 years"
+)
+async def _getlongtenuredepartments(ctx):
+  departments = DepartmentModel.get_departments_with_long_tenured_employees()
+
+  if departments:
+    embed = discord.Embed(
+        title="Departments with Long-Tenured Employees",
+        description=
+        "Departments with doctors and nurses who have been employed for more than 5 years:",
+        color=discord.Color.blue())
+    for dept in departments:
+      embed.add_field(name=f"Department ID: {dept['department_id']}",
+                      value=f"Name: {dept['department_name']}",
+                      inline=False)
+    await ctx.send(embed=embed)
+  else:
+    await ctx.send(
+        "No departments found with long-tenured employees or an error occurred."
+    )
 
 
 @bot.command(name="cmd_11",
