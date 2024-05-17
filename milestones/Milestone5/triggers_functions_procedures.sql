@@ -230,3 +230,43 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+-- Procedure to get the total number of medications managed by each pharmacy staff member
+DELIMITER $$
+DROP PROCEDURE IF EXISTS GetTotalMedicationsManagedByEachPharmacyStaff $$
+CREATE PROCEDURE GetTotalMedicationsManagedByEachPharmacyStaff()
+BEGIN
+    SELECT 
+        ps.pharmacy_staff_id,
+        e.employee_name AS pharmacy_staff_name,
+        COUNT(m.medication_id) AS total_medications_managed
+    FROM 
+        PharmacyStaff ps
+    JOIN 
+        Employee e ON ps.pharmacy_staff_id = e.employee_id
+    LEFT JOIN 
+        Medication m ON ps.pharmacy_staff_id = m.managed_by
+    GROUP BY 
+        ps.pharmacy_staff_id,
+        e.employee_name;
+END $$
+
+DELIMITER ;
+
+-- Monthly appointments count to get the number of appointments per month
+DELIMITER $$
+DROP PROCEDURE IF EXISTS GetMonthlyAppointmentsCount $$
+CREATE PROCEDURE GetMonthlyAppointmentsCount()
+BEGIN
+    SELECT 
+        DATE_FORMAT(appointment_date, '%Y-%m') AS month,
+        COUNT(*) AS appointment_count
+    FROM 
+        Appointment
+    GROUP BY 
+        DATE_FORMAT(appointment_date, '%Y-%m')
+    ORDER BY 
+        DATE_FORMAT(appointment_date, '%Y-%m');
+END $$
+
+DELIMITER ;
