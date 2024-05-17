@@ -2,11 +2,27 @@ use HospitalManagementDB;
 
 select * from Department;
 select * from Employee;
+select * from Doctor;
 select * from Hospital;
 Select * from Prescription;
 Select * from MedicalRecord;
 Select * from Appointment;
 Select * from Medication;
+
+CALL GetEquipmentUtilizationRates('2024-06-01', '2025-01-31');
+CALL GetDepartmentsByAppointmentCount();
+
+CALL GetPatientDetails(1);
+
+CALL GetEmployeeCountByDepartment(1, @emp_count); 
+SELECT @emp_count AS emp_count;
+
+SELECT GetEmployeeCountByDepartment(1) AS emp_count;
+
+DELETE FROM Doctor 
+WHERE doctor_id = 1;
+
+CALL GetReadmissionInfo(1);
 
 SELECT 
     a1.patient AS patient_id,
