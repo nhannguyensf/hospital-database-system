@@ -543,19 +543,93 @@ async def _getemployeecountbydepartment(ctx, department_id: str = None):
   await ctx.send(embed=embed)
 
 
-@bot.command(name="cmd_7", description="database business requirement #7 here")
-async def _command7(ctx, *args):
-  await ctx.send("This method is not implemented yet")
+@bot.command(
+    name="getequiputilization",
+    description=
+    "Get the utilization rates of medical equipment between specified dates")
+async def _getequiputilization(ctx, start_date: str, end_date: str):
+  try:
+    utilization_rates = EquipmentModel.get_utilization_rates(
+        start_date, end_date)
+    if utilization_rates:
+      embed = discord.Embed(
+          title="Equipment Utilization Rates",
+          description=
+          f"Utilization rates of medical equipment from {start_date} to {end_date}, sorted by usage time:",
+          color=discord.Color.blue())
+      for rate in utilization_rates:
+        embed.add_field(
+            name=f"Equipment ID: {rate['equipment_id']}",
+            value=
+            (f"Name: {rate['equipment_name']}\n"
+             f"Total Appointments: {rate['total_appointments']}\n"
+             f"Utilization Rate: {rate['utilization_rate']:.2f} appointments per day"
+             ),
+            inline=False)
+      await ctx.send(embed=embed)
+    else:
+      await ctx.send("No utilization data found for the specified date range.")
+  except ValueError:
+    await ctx.send("Invalid date format. Please use YYYY-MM-DD format.")
 
 
-@bot.command(name="cmd_8", description="database business requirement #8 here")
-async def _command8(ctx, *args):
-  await ctx.send("This method is not implemented yet")
+@bot.command(
+    name="getdeptappointments",
+    description=
+    "Get the departments with the highest number of scheduled appointments")
+async def _getdeptappointments(ctx):
+  departments = DepartmentModel.get_departments_by_appointment_count()
+  if departments:
+    embed = discord.Embed(
+        title="Departments by Appointment Count",
+        description=
+        "Departments with the highest number of scheduled appointments:",
+        color=discord.Color.blue())
+    for dept in departments:
+      embed.add_field(
+          name=f"Department ID: {dept['department_id']}",
+          value=(f"Name: {dept['department_name']}\n"
+                 f"Total Appointments: {dept['total_appointments']}"),
+          inline=False)
+    await ctx.send(embed=embed)
+  else:
+    await ctx.send("Failed to retrieve departments by appointment count.")
 
 
-@bot.command(name="cmd_9", description="database business requirement #9 here")
-async def _command9(ctx, *args):
-  await ctx.send("This method is not implemented yet")
+@bot.command(
+    name="getpatientcountbyinsurance",
+    description=
+    "Get the number of patients subscribed to a specific insurance plan")
+async def _getpatientcountbyinsurance(ctx, insurance_plan_id: str):
+  try:
+    # Convert the insurance_plan_id to an integer
+    insurance_plan_id_int = int(insurance_plan_id)
+
+    # Check if the insurance_plan_id_int is positive
+    if insurance_plan_id_int <= 0:
+      await ctx.send(
+          "Insurance plan ID must be a positive integer. Please provide a valid ID."
+      )
+      return
+
+    # Get the patient count and plan name
+    result = InsurancePlanModel.get_patient_count_by_insurance_plan(
+        insurance_plan_id_int)
+
+    if result is not None:
+      embed = discord.Embed(
+          title="Patient Count by Insurance Plan",
+          description=
+          f"The number of patients subscribed to the insurance plan '{result['plan_name']}' (ID: {insurance_plan_id_int}) is {result['patient_count']}.",
+          color=discord.Color.blue())
+      await ctx.send(embed=embed)
+    else:
+      await ctx.send(
+          "Failed to retrieve the patient count for the specified insurance plan."
+      )
+  except ValueError:
+    await ctx.send(
+        "Invalid insurance plan ID format. Please provide a valid integer.")
 
 
 @bot.command(name="cmd_10",

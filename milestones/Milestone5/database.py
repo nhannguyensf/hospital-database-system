@@ -228,3 +228,9 @@ class Query:
   CALL_GET_PATIENT_DETAILS = """CALL GetPatientDetails(%s)"""
 
   CALL_GET_EMPLOYEE_COUNT_BY_DEPARTMENT = """SELECT GetEmployeeCountByDepartment(%s) AS emp_count"""
+
+  CALL_GET_EQUIPMENT_UTILIZATION_RATES = """CALL GetEquipmentUtilizationRates(%s, %s)"""
+
+  CALL_GET_DEPARTMENTS_BY_APPOINTMENT_COUNT = """CALL GetDepartmentsByAppointmentCount()"""
+
+  CALL_GET_PATIENT_COUNT_BY_INSURANCE_PLAN = """CALL GetPatientCountByInsurancePlan(%s)"""

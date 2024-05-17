@@ -121,6 +121,21 @@ class HospitalModel(ModelInterface):
       return None
 
 
+class DepartmentModel(ModelInterface):
+
+  @staticmethod
+  def get_departments_by_appointment_count():
+    try:
+      results = Database.select(
+          Query.CALL_GET_DEPARTMENTS_BY_APPOINTMENT_COUNT)
+      return results
+    except DatabaseError as db_err:
+      print(
+          f"Failed to retrieve departments by appointment count. Error: {db_err}"
+      )
+      return None
+
+
 class EmployeeModel(ModelInterface):
 
   def __init__(self, id=None) -> None:
@@ -433,3 +448,30 @@ class AppointmentModel(ModelInterface):
     except DatabaseError as db_err:
       print(f"Failed to retrieve schedule. Error: {db_err}")
       return None
+
+
+class EquipmentModel(ModelInterface):
+
+  @staticmethod
+  def get_utilization_rates(start_date, end_date):
+    try:
+      results = Database.select(Query.CALL_GET_EQUIPMENT_UTILIZATION_RATES,
+                                (start_date, end_date))
+      return results
+    except DatabaseError as db_err:
+      print(f"Failed to retrieve equipment utilization rates. Error: {db_err}")
+      return None
+
+
+class InsurancePlanModel(ModelInterface):
+
+  @staticmethod
+  def get_patient_count_by_insurance_plan(insurance_plan_id):
+      try:
+          results = Database.select(Query.CALL_GET_PATIENT_COUNT_BY_INSURANCE_PLAN, (insurance_plan_id,))
+          if results:
+              return results[0]
+          return None
+      except DatabaseError as db_err:
+          print(f"Failed to retrieve patient count for insurance plan ID {insurance_plan_id}. Error: {db_err}")
+          return None
